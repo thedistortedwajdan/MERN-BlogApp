@@ -1,3 +1,5 @@
-export const Single = () => {
+function Single() {
   return <div>Single</div>;
-};
+}
+
+export default Single;
