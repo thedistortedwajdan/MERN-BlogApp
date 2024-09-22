@@ -1,8 +1,10 @@
 import axios from "axios";
-import { useState } from "react";
+import { useContext, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
+import { AuthContext } from "../context/authContext.jsx";
 
 function Login() {
+  const { login } = useContext(AuthContext);
   const navigate = useNavigate();
   const [inputs, setinputs] = useState({
     username: "",
@@ -19,15 +21,11 @@ function Login() {
       console.log(error.message);
     }
   };
-  const login = async (e) => {
+  const handleLogin = async (e) => {
     try {
       e.preventDefault();
-      const res = await axios.post("/api/auth/login", inputs);
-      if (res.status !== 200) {
-        seterr(res.response.data);
-      } else {
-        navigate("/");
-      }
+      await login(inputs);
+      navigate("/");
     } catch (error) {
       seterr(error.response.data);
     }
@@ -49,7 +47,7 @@ function Login() {
             placeholder="password"
             onChange={onChange}
           />
-          <button onClick={login}>Login</button>
+          <button onClick={handleLogin}>Login</button>
           {err && <p>{err}</p>}
           <span>
             <Link to={"/register"}>Register</Link>

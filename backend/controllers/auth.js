@@ -32,7 +32,7 @@ export const login = async (req, res) => {
       if (!data.length) return res.status(404).json("Account does not exist");
 
       //check is password correct
-      const isPasswordCorrect = bcrypt.compare(
+      const isPasswordCorrect = bcrypt.compareSync(
         req.body.password[0],
         data[0].password
       );
@@ -46,10 +46,27 @@ export const login = async (req, res) => {
       // seperate password
       const { password, ...other } = data[0];
       // create cookie
-      res.cookie("token", token).status(200).json(other);
+      res
+        .cookie("token", token, {
+          httpOnly: true,
+        })
+        .status(200)
+        .json(other);
     });
   } catch (error) {
     console.log(error.message);
   }
 };
-export const logout = (req, res) => {};
+export const logout = (req, res) => {
+  try {
+    res
+      .clearCookie("token", {
+        sameSite: "none",
+        secure: true,
+      })
+      .status(200)
+      .json("logged out");
+  } catch (error) {
+    console.log(error.message);
+  }
+};
