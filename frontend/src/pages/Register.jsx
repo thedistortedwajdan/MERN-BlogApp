@@ -21,10 +21,7 @@ function Register() {
   const register = async (e) => {
     try {
       e.preventDefault();
-      const res = await axios.post(
-        "/api/auth/register",
-        inputs
-      );
+      const res = await axios.post("/api/auth/register", inputs);
       if (res.status !== 200) {
         seterr(res.response.data);
       } else {
