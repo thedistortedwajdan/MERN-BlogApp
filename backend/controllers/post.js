@@ -14,13 +14,19 @@ export const getAllPosts = (req, res) => {
   }
 };
 
-export const getPost = () => {
+export const getPost = (req, res) => {
   try {
+    const query =
+      "SELECT `username`, `title`,`description`,p.image,u.image AS userImage,`category`,`date` FROM users u JOIN posts p ON u.id=p.userId WHERE p.id = ? ";
+    db.query(query, [req.params.id], (err, data) => {
+      if (err) return res.json(err);
+      return res.status(200).json(data[0]);
+    });
   } catch (error) {
     console.log(error.message);
   }
 };
-export const deletePost = () => {
+export const deletePost = (req, res) => {
   try {
   } catch (error) {
     console.log(error.message);

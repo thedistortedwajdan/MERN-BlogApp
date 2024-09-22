@@ -3,7 +3,7 @@ import Footer from "../components/Footer";
 import Menu from "../components/Menu";
 import Edit from "../assets/edit.png";
 import Delete from "../assets/delete.png";
-import { Link, useLocation } from "react-router-dom";
+import { Link, useLocation, useNavigate } from "react-router-dom";
 import { useContext, useEffect, useState } from "react";
 import axios from "axios";
 import moment from "moment";
@@ -13,6 +13,7 @@ function Single() {
   const { user } = useContext(AuthContext);
   const [post, setpost] = useState({});
   const location = useLocation();
+  const navigate = useNavigate();
   const postId = location.pathname.split("/")[2];
   useEffect(() => {
     const getPost = async () => {
@@ -27,6 +28,14 @@ function Single() {
     };
     getPost();
   }, [postId]);
+  const handleDelete = async () => {
+    try {
+      await axios.delete(`/api/post/${postId}`);
+      navigate("/");
+    } catch (error) {
+      console.log(error.message);
+    }
+  };
   return (
     <>
       <Navbar />
@@ -34,7 +43,7 @@ function Single() {
         <div className="content">
           <img src={post?.image} alt="" />
           <div className="user">
-            <img src="" alt="" />
+            <img src={post?.userImage} alt="" />
             <div className="info">
               <span>{post?.username}</span>
               <p>{moment(post.date).fromNow()} ago</p>
@@ -44,9 +53,7 @@ function Single() {
                 <Link to={`/upload?edit=`}>
                   <img src={Edit} alt="" />
                 </Link>
-                <Link>
-                  <img src={Delete} alt="" />
-                </Link>
+                <img onClick={handleDelete} src={Delete} alt="" />
               </div>
             )}
           </div>
