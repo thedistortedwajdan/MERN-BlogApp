@@ -1,5 +1,6 @@
 import { db } from "../db.js";
 import bcrypt from "bcryptjs";
+import jwt from "jsonwebtoken";
 export const register = (req, res) => {
   try {
     // check user exists
@@ -23,20 +24,32 @@ export const register = (req, res) => {
   }
 };
 export const login = async (req, res) => {
-  // check if user does not exist
-  const query = "SELECT * FROM users WHERE username = ?";
-  db.query(query, [req.body.username[0]], (err, data) => {
-    if (err) return res.json(err);
-    if (!data.length) return res.status(404).json("Account does not exist");
+  try {
+    // check if user does not exist
+    const query = "SELECT * FROM users WHERE username = ?";
+    db.query(query, [req.body.username[0]], (err, data) => {
+      if (err) return res.json(err);
+      if (!data.length) return res.status(404).json("Account does not exist");
 
-    //check is password correct
-    const isPasswordCorrect = bcrypt.compare(
-      req.body.password[0],
-      data[0].password
-    );
+      //check is password correct
+      const isPasswordCorrect = bcrypt.compare(
+        req.body.password[0],
+        data[0].password
+      );
 
-    if (!isPasswordCorrect)
-      return res.status(400).json("incorrect username or password");
-  });
+      if (!isPasswordCorrect)
+        return res.status(400).json("incorrect username or password");
+
+      // create token
+      const token = jwt.sign({ id: data[0].id }, "jwtkey");
+
+      // seperate password
+      const { password, ...other } = data[0];
+      // create cookie
+      res.cookie("token", token).status(200).json(other);
+    });
+  } catch (error) {
+    console.log(error.message);
+  }
 };
 export const logout = (req, res) => {};

@@ -22,7 +22,7 @@ function Login() {
   const login = async (e) => {
     try {
       e.preventDefault();
-      const res = await axios.post("http://localhost:4000/auth/login", inputs);
+      const res = await axios.post("/api/auth/login", inputs);
       if (res.status !== 200) {
         seterr(res.response.data);
       } else {

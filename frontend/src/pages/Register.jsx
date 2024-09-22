@@ -22,7 +22,7 @@ function Register() {
     try {
       e.preventDefault();
       const res = await axios.post(
-        "http://localhost:4000/auth/register",
+        "/api/auth/register",
         inputs
       );
       if (res.status !== 200) {
