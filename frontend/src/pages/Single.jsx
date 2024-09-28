@@ -60,7 +60,7 @@ function Single() {
           <h1>{post.title}</h1>
           {post.description}
         </div>
-        <Menu />
+        <Menu category={post.category} />
       </div>
       <Footer />
     </>
