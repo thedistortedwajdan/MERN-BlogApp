@@ -1,4 +1,5 @@
 import { db } from "../db.js";
+import jwt from "jsonwebtoken";
 export const getAllPosts = (req, res) => {
   try {
     const query = req.query.category
@@ -28,6 +29,17 @@ export const getPost = (req, res) => {
 };
 export const deletePost = (req, res) => {
   try {
+    const token = req.cookies.token;
+    if (!token) return res.status(401).json("not authenticated");
+    jwt.verify(token, "jwtkey", (err, user) => {
+      if (err) return res.status(403).json("token not valid");
+      const postId = req.params.id;
+      const query = "DELETE FROM posts WHERE `id` = ? `userId` = ?";
+      db.query(query, [postId, user.id], (er, data) => {
+        if (err) return res.status(403).json("not your post");
+        return res.status(200).json("deleted");
+      });
+    });
   } catch (error) {
     console.log(error.message);
   }

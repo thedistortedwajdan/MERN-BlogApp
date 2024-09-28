@@ -1,4 +1,4 @@
-export const Menu = () => {
+const Menu = () => {
   const posts = [
     {
       id: 1,
@@ -40,3 +40,4 @@ export const Menu = () => {
     </>
   );
 };
+export default Menu;
