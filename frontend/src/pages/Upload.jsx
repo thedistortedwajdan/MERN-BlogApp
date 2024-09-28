@@ -5,12 +5,19 @@ import "react-quill/dist/quill.snow.css";
 import { useState } from "react";
 function Upload() {
   const [value, setValue] = useState("");
+  const [title, settitle] = useState("");
+  const [image, setimage] = useState(null);
+  const [category, setcategory] = useState("");
   return (
     <>
       <Navbar />
       <div className="upload">
         <div className="content">
-          <input type="text" placeholder="Title" />
+          <input
+            type="text"
+            placeholder="Title"
+            onChange={(e) => settitle(e.target.value)}
+          />
           <div className="editorContainer">
             <ReactQuill
               className="editor"
@@ -35,6 +42,7 @@ function Upload() {
               accept=".png,.jpg,.svg,.WebP,.AVIF,.APNG,.GIF"
               name=""
               id="file"
+              onChange={(e) => setimage(e.target.files[0])}
             />
             <label className="file" htmlFor="file">
               Upload Image
@@ -47,7 +55,13 @@ function Upload() {
           <div className="item">
             <h1>Category</h1>
             <div className="category">
-              <input type="radio" name="category" value="art" id="art" />
+              <input
+                type="radio"
+                name="category"
+                value="art"
+                id="art"
+                onChange={(e) => setcategory(e.target.value)}
+              />
               <label htmlFor="art">Art</label>
             </div>
             <div className="category">
@@ -56,6 +70,7 @@ function Upload() {
                 name="category"
                 value="science"
                 id="science"
+                onChange={(e) => setcategory(e.target.value)}
               />
               <label htmlFor="science">Science</label>
             </div>
@@ -65,15 +80,28 @@ function Upload() {
                 name="category"
                 value="technology"
                 id="technology"
+                onChange={(e) => setcategory(e.target.value)}
               />
               <label htmlFor="technology">Technology</label>
             </div>
             <div className="category">
-              <input type="radio" name="category" value="food" id="food" />
+              <input
+                type="radio"
+                name="category"
+                value="food"
+                id="food"
+                onChange={(e) => setcategory(e.target.value)}
+              />
               <label htmlFor="food">Food</label>
             </div>
             <div className="category">
-              <input type="radio" name="category" value="sports" id="sports" />
+              <input
+                type="radio"
+                name="category"
+                value="sports"
+                id="sports"
+                onChange={(e) => setcategory(e.target.value)}
+              />
               <label htmlFor="sports">Sports</label>
             </div>
           </div>
