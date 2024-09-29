@@ -41,7 +41,7 @@ function Single() {
       <Navbar />
       <div className="single">
         <div className="content">
-          <img src={post?.image} alt="" />
+          <img src={`../../../backend/images/${post?.image}`} alt="" />
           <div className="user">
             <img src={post?.userImage} alt="" />
             <div className="info">
@@ -50,7 +50,7 @@ function Single() {
             </div>
             {user.username === post.username && (
               <div className="edit">
-                <Link to={`/upload?edit=`}>
+                <Link to={`/upload?edit=`} state={post}>
                   <img src={Edit} alt="" />
                 </Link>
                 <img onClick={handleDelete} src={Delete} alt="" />
@@ -58,7 +58,11 @@ function Single() {
             )}
           </div>
           <h1>{post.title}</h1>
-          {post.description}
+          <p
+            dangerouslySetInnerHTML={{
+              __html: DOMPurify.sanitize(post.description),
+            }}
+          ></p>
         </div>
         <Menu category={post.category} />
       </div>

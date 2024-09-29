@@ -46,6 +46,11 @@ function Home() {
     };
     getPosts();
   }, [category]);
+
+  const parseHtml = (html) => {
+    const doc = new DOMParser().parseFromString(html, "text/html");
+    return doc.body.textContent;
+  };
   return (
     <>
       <Navbar />
@@ -54,13 +59,13 @@ function Home() {
           {posts.map((post) => (
             <div className="post" key={post.id}>
               <div className="img">
-                <img src={post.img} alt="" />
+                <img src={`../../../backend/images/${post.image}`} alt="" />
               </div>
               <div className="content">
                 <Link className="link" to={`/post/${post.id}`}>
                   <h1>{post.title}</h1>
                 </Link>
-                <p>{post.desc}</p>
+                <p>{parseHtml(post.description)}</p>
                 <button>Read More</button>
               </div>
             </div>

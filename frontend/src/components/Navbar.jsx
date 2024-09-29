@@ -1,4 +1,4 @@
-import { Link, useLocation } from "react-router-dom";
+import { Link, useLocation, useNavigate } from "react-router-dom";
 import Logo from "../assets/logo.png";
 import "../style.scss";
 import { useContext } from "react";
@@ -6,7 +6,17 @@ import { AuthContext } from "../context/authContext";
 
 function Navbar() {
   const { logout, user } = useContext(AuthContext);
-  
+  const navigate = useNavigate();
+
+  const handleLogout = async () => {
+    try {
+      await logout();
+      navigate("/login");
+    } catch (error) {
+      console.log(error.message);
+    }
+  };
+
   return (
     <>
       <div className="navbar">
@@ -34,7 +44,7 @@ function Navbar() {
             </Link>
             <span>{user?.username}</span>
             {user ? (
-              <span onClick={logout}>Logout</span>
+              <span onClick={handleLogout}>Logout</span>
             ) : (
               <Link className="link" to={"/login"}>
                 Login
